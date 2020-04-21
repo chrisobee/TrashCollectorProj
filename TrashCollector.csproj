@@ -5,11 +5,19 @@
     <UserSecretsId>aspnet-TrashCollector-5CCD02E5-5FF1-4E80-9A23-9939F5B25F5C</UserSecretsId>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="Data\Migrations\20200421200028_AddedCustomersAndEmployeeTables.cs" />
+    <Compile Remove="Data\Migrations\20200421200028_AddedCustomersAndEmployeeTables.Designer.cs" />
+    <Compile Remove="Data\Migrations\20200421203648_CustomersAndEmployeesTablesAdded.cs" />
+    <Compile Remove="Data\Migrations\20200421203648_CustomersAndEmployeesTablesAdded.Designer.cs" />
+  </ItemGroup>
+
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="3.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.1.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.1" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.1" />

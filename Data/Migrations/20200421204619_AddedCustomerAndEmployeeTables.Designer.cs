@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TrashCollector.Data;
 
 namespace TrashCollector.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200421204619_AddedCustomerAndEmployeeTables")]
+    partial class AddedCustomerAndEmployeeTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -49,23 +51,9 @@ namespace TrashCollector.Data.Migrations
                         new
                         {
                             Id = "26f575f1 - ca97 - 4a58 - b87e - 69fc4907ef81",
-                            ConcurrencyStamp = "c41fe56f-c882-4398-9993-011b23e36ec8",
+                            ConcurrencyStamp = "b78b430a-649f-4df3-836e-db3013106ed7",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
-                        },
-                        new
-                        {
-                            Id = "01c8a6c3-a16b-4bbc-9789-88db637c8778",
-                            ConcurrencyStamp = "e17753b0-5d9d-4cd1-acec-045dddf4c929",
-                            Name = "Customer",
-                            NormalizedName = "CUSTOMER"
-                        },
-                        new
-                        {
-                            Id = "3e1ea929-a517-49d8-87bc-dec994a34e67",
-                            ConcurrencyStamp = "bcef994d-0d48-4d74-a34b-47f9cc61cf99",
-                            Name = "Employee",
-                            NormalizedName = "EMPLOYEE"
                         });
                 });
 
