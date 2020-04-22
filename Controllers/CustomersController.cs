@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -50,7 +51,6 @@ namespace TrashCollector.Controllers
         // GET: Customers/Create
         public IActionResult Create()
         {
-            ViewData["IdentityUserId"] = new SelectList(_context.Users, "Id", "Id");
             return View();
         }
 
@@ -59,16 +59,21 @@ namespace TrashCollector.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,IdentityUserId")] Customer customer)
+        public async Task<IActionResult> Create(CustomerWithAddress customerWithAddress)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(customer);
+                _context.Add(customerWithAddress.Address);
+                await _context.SaveChangesAsync();
+
+                customerWithAddress.Customer.IdentityUserId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                customerWithAddress.Customer.AddressId = customerWithAddress.Address.AddressId;
+                _context.Add(customerWithAddress.Customer);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["IdentityUserId"] = new SelectList(_context.Users, "Id", "Id", customer.IdentityUserId);
-            return View(customer);
+            ViewData["IdentityUserId"] = new SelectList(_context.Users, "Id", "Id", customerWithAddress.Customer.IdentityUserId);
+            return View(customerWithAddress);
         }
 
         // GET: Customers/Edit/5
