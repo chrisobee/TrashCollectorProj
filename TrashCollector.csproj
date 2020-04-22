@@ -12,6 +12,8 @@
     <Compile Remove="Data\Migrations\20200421203648_CustomersAndEmployeesTablesAdded.Designer.cs" />
     <Compile Remove="Data\Migrations\20200422151313_RemovedAdminRole.cs" />
     <Compile Remove="Data\Migrations\20200422151313_RemovedAdminRole.Designer.cs" />
+    <Compile Remove="Data\Migrations\20200422163529_AddedAddressFKToCustomers.cs" />
+    <Compile Remove="Data\Migrations\20200422163529_AddedAddressFKToCustomers.Designer.cs" />
   </ItemGroup>
 
 
