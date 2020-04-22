@@ -10,6 +10,8 @@
     <Compile Remove="Data\Migrations\20200421200028_AddedCustomersAndEmployeeTables.Designer.cs" />
     <Compile Remove="Data\Migrations\20200421203648_CustomersAndEmployeesTablesAdded.cs" />
     <Compile Remove="Data\Migrations\20200421203648_CustomersAndEmployeesTablesAdded.Designer.cs" />
+    <Compile Remove="Data\Migrations\20200422151313_RemovedAdminRole.cs" />
+    <Compile Remove="Data\Migrations\20200422151313_RemovedAdminRole.Designer.cs" />
   </ItemGroup>
 
 
