@@ -25,15 +25,6 @@ namespace TrashCollector.Data
                 .HasData(
                     new IdentityRole
                     {
-                        Id = "26f575f1 - ca97 - 4a58 - b87e - 69fc4907ef81",
-                        Name = "Admin",
-                        NormalizedName = "ADMIN"
-                    }
-                );
-            builder.Entity<IdentityRole>()
-                .HasData(
-                    new IdentityRole
-                    {
                         Id = "01c8a6c3-a16b-4bbc-9789-88db637c8778",
                         Name = "Customer",
                         NormalizedName = "CUSTOMER"
