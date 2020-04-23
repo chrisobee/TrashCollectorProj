@@ -84,17 +84,12 @@ namespace TrashCollector.Controllers
                 return NotFound();
             }
 
-            var customer = await _context.Customers.FindAsync(id);
+            var customer = await _context.Customers.Include(c => c.Address).FirstOrDefaultAsync(c => c.Id == id);
             if (customer == null)
             {
                 return NotFound();
             }
-            CustomerWithAddress customerWithAddress = new CustomerWithAddress()
-            {
-                Customer = customer,
-                Address = _context.Addresses.Where(a => a.AddressId == customer.AddressId).SingleOrDefault()
-            };
-            return View(customerWithAddress);
+            return View(customer);
         }
 
         // POST: Customers/Edit/5
@@ -102,9 +97,9 @@ namespace TrashCollector.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, CustomerWithAddress customerWithAddress)
+        public async Task<IActionResult> Edit(int id, Customer customer)
         {
-            if (id != customerWithAddress.Customer.Id)
+            if (id != customer.Id)
             {
                 return NotFound();
             }
@@ -113,13 +108,13 @@ namespace TrashCollector.Controllers
             {
                 try
                 {
-                    _context.Update(customerWithAddress.Address);
-                    _context.Update(customerWithAddress.Customer);
+                    _context.Update(customer.Address);
+                    _context.Update(customer);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!CustomerExists(customerWithAddress.Customer.Id))
+                    if (!CustomerExists(customer.Id))
                     {
                         return NotFound();
                     }
@@ -130,7 +125,7 @@ namespace TrashCollector.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(customerWithAddress);
+            return View(customer);
         }
 
         // GET: Customers/Delete/5
