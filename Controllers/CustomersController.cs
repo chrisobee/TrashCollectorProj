@@ -25,7 +25,7 @@ namespace TrashCollector.Controllers
         // GET: Customers
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Customers.Include(c => c.IdentityUser);
+            var applicationDbContext = _context.Customers.Include(c => c.IdentityUser).Include(c => c.Address);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -89,8 +89,12 @@ namespace TrashCollector.Controllers
             {
                 return NotFound();
             }
-            ViewData["IdentityUserId"] = new SelectList(_context.Users, "Id", "Id", customer.IdentityUserId);
-            return View(customer);
+            CustomerWithAddress customerWithAddress = new CustomerWithAddress()
+            {
+                Customer = customer,
+                Address = _context.Addresses.Where(a => a.AddressId == customer.AddressId).SingleOrDefault()
+            };
+            return View(customerWithAddress);
         }
 
         // POST: Customers/Edit/5
@@ -98,9 +102,9 @@ namespace TrashCollector.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,IdentityUserId")] Customer customer)
+        public async Task<IActionResult> Edit(int id, CustomerWithAddress customerWithAddress)
         {
-            if (id != customer.Id)
+            if (id != customerWithAddress.Customer.Id)
             {
                 return NotFound();
             }
@@ -109,12 +113,13 @@ namespace TrashCollector.Controllers
             {
                 try
                 {
-                    _context.Update(customer);
+                    _context.Update(customerWithAddress.Address);
+                    _context.Update(customerWithAddress.Customer);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!CustomerExists(customer.Id))
+                    if (!CustomerExists(customerWithAddress.Customer.Id))
                     {
                         return NotFound();
                     }
@@ -125,8 +130,7 @@ namespace TrashCollector.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["IdentityUserId"] = new SelectList(_context.Users, "Id", "Id", customer.IdentityUserId);
-            return View(customer);
+            return View(customerWithAddress);
         }
 
         // GET: Customers/Delete/5
