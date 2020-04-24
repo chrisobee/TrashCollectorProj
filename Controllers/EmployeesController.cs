@@ -13,7 +13,7 @@ namespace TrashCollector.Controllers
     public class EmployeesController : Controller
     {
         private readonly ApplicationDbContext _context;
-
+        private double pricePerPickup;
         public EmployeesController(ApplicationDbContext context)
         {
             _context = context;
@@ -23,6 +23,14 @@ namespace TrashCollector.Controllers
         public async Task<IActionResult> Index()
         {
             return View(await _context.Customers.ToListAsync());
+        }
+
+        public async Task<IActionResult> ChargeCustomer(int? id)
+        {
+            var customer = await _context.Customers.Where(c => c.Id == id).FirstOrDefaultAsync();
+            customer.Balance += pricePerPickup;
+            await _context.SaveChangesAsync();
+            return RedirectToAction("Index");
         }
 
         // GET: Employees/Details/5
