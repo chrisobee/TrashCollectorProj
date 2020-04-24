@@ -24,6 +24,11 @@
                 <span asp-validation-for="Customer.PickupDay" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="Customer.OneTimePickup" class="control-label"></label>
+                <input asp-for="Customer.OneTimePickup" class="form-control" />
+                <span asp-validation-for="Customer.OneTimePickup" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <label asp-for="Address.AddressLine1" class="control-label"></label>
                 <input asp-for="Address.AddressLine1" class="form-control" />
                 <span asp-validation-for="Address.AddressLine1" class="text-danger"></span>
@@ -38,7 +43,7 @@
                 <input asp-for="Address.AbbreviatedState" class="form-control" />
                 <span asp-validation-for="Address.AbbreviatedState" class="text-danger"></span>
             </div>
-            <div class="form-group"> 
+            <div class="form-group">
                 <label asp-for="Address.Zipcode" class="control-label"></label>
                 <input asp-for="Address.Zipcode" class="form-control" />
                 <span asp-validation-for="Address.Zipcode" class="text-danger"></span>

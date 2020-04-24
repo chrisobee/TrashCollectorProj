@@ -13,7 +13,6 @@ namespace TrashCollector.Controllers
     public class EmployeesController : Controller
     {
         private readonly ApplicationDbContext _context;
-        private double pricePerPickup;
         public EmployeesController(ApplicationDbContext context)
         {
             _context = context;
@@ -27,15 +26,16 @@ namespace TrashCollector.Controllers
             return View(customers);
         }
 
-        // GET: Employees
-        public IActionResult Index(DayOfWeek filterDay)
+        // POST: Employees/Index
+        [HttpPost]
+        public IActionResult Index(DayOfWeek filteredDay)
         {
-            var customers = _context.Customers.Where(c => c.PickupDay == filterDay).ToList();
+            var customers = _context.Customers.Where(c => c.PickupDay == filteredDay).ToList();
             return View(customers);
         }
-
         public async Task<IActionResult> ChargeCustomer(int? id)
         {
+            double pricePerPickup = 5.00;
             var customer = await _context.Customers.Where(c => c.Id == id).FirstOrDefaultAsync();
             customer.Balance += pricePerPickup;
             await _context.SaveChangesAsync();

@@ -7,6 +7,12 @@
 
 <h1>All Customer Pickups</h1>
 
+<form asp-action="Index">
+    <label for="filteredDay" class="form-control">Choose Day to Filter By:</label>
+    <select id="filteredDay" name="filteredDay" asp-items="@Html.GetEnumSelectList<DayOfWeek>()"></select>
+    <input type="submit" class="btn btn-primary" />
+</form>
+
 <table class="table">
     <thead>
         <tr>
