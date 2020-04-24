@@ -20,9 +20,18 @@ namespace TrashCollector.Controllers
         }
 
         // GET: Employees
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            return View(await _context.Customers.ToListAsync());
+            var currentDay = DateTime.Now.DayOfWeek;
+            var customers = _context.Customers.Where(c => c.PickupDay == currentDay).ToList();
+            return View(customers);
+        }
+
+        // GET: Employees
+        public IActionResult Index(DayOfWeek filterDay)
+        {
+            var customers = _context.Customers.Where(c => c.PickupDay == filterDay).ToList();
+            return View(customers);
         }
 
         public async Task<IActionResult> ChargeCustomer(int? id)
