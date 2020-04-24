@@ -114,7 +114,7 @@ namespace TrashCollector.Areas.Identity.Pages.Account
                     else
                     {
                         await _signInManager.SignInAsync(user, isPersistent: false);
-                        return RedirectToAction("Create", "Customers");
+                        return RedirectToAction("Create", "Home");
                     }
                 }
                 foreach (var error in result.Errors)

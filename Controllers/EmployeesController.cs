@@ -22,7 +22,7 @@ namespace TrashCollector.Controllers
         // GET: Employees
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Employees.ToListAsync());
+            return View(await _context.Customers.ToListAsync());
         }
 
         // GET: Employees/Details/5

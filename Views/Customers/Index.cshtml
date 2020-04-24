@@ -5,7 +5,6 @@
     Layout = "~/Views/Shared/_CustomerLayout.cshtml";
 }
 
-<div class="container">
     <div class="row">
         <div style="text-align:center; background-color: grey; height:200px; width:400px" class="col-md-6">
             <h2>Hello, @Model.Name</h2>
@@ -16,53 +15,64 @@
     </div>
     <br />
     <div class="row">
-            <div style="background-color:grey; color:black;" class="col-md-6">
-                <table style="width:300px;">
-                    <tr style="padding:15px;">
-                        <td>
-                            Pickup Day
-                        </td>
-                        <td>
-                            @Html.DisplayFor(model => model.PickupDay)
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="padding: 15px">
-                            Address
-                        </td>
-                        <td style="padding: 15px">
-                            @Html.DisplayFor(model => model.Address.AddressLine1)
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="padding: 15px">
-                            City
-                        </td>
-                        <td style="padding: 15px">
-                            @Html.DisplayFor(model => model.Address.City)
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="padding: 15px">
-                            State
-                        </td>
-                        <td style="padding: 15px">
-                            @Html.DisplayFor(model => model.Address.AbbreviatedState)
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="padding: 15px">
-                            Zipcode
-                        </td>
-                        <td style="padding: 15px">
-                            @Html.DisplayFor(model => model.Address.Zipcode)
-                        </td>
-                    </tr>
-                </table>
-                <a asp-action="Edit" asp-route-id="@Model.Id">Edit Info</a>
+            <div class="col-md-6">
+                <div style="background-color:grey; width:300px; color:black; padding:20px;">
+                    <table style="width:300px;">
+                        <tr style="padding:15px;">
+                            <td>
+                                Pickup Day
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => model.PickupDay)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 15px">
+                                Address
+                            </td>
+                            <td style="padding: 15px">
+                                @Html.DisplayFor(model => model.Address.AddressLine1)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 15px">
+                                City
+                            </td>
+                            <td style="padding: 15px">
+                                @Html.DisplayFor(model => model.Address.City)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 15px">
+                                State
+                            </td>
+                            <td style="padding: 15px">
+                                @Html.DisplayFor(model => model.Address.AbbreviatedState)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 15px">
+                                Zipcode
+                            </td>
+                            <td style="padding: 15px">
+                                @Html.DisplayFor(model => model.Address.Zipcode)
+                            </td>
+                        </tr>
+                    </table>
+                    <a asp-action="Edit" asp-route-id="@Model.Id">Edit Info</a>
+                </div>
             </div>
+        <div style="background-color:grey; width:300px;"class="col-md-6">
+            @if(Model.OneTimePickup == null)
+            {
+                <div class="alert alert-dismissible alert-info">
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    <p>Each customer is allowed one special request pickup per month. You can pick one here.</p>
+                </div>
+            }
+
+        </div>
     </div>
-</div>
 @*<p>
     <a asp-action="Create">Create New</a>
 </p>
