@@ -1,13 +1,69 @@
-﻿@model IEnumerable<TrashCollector.Models.Customer>
+﻿@model TrashCollector.Models.Customer
 
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_CustomerLayout.cshtml";
 }
 
-<h1>Index</h1>
-
-<p>
+<div class="container">
+    <div class="row">
+        <div style="text-align:center; background-color: grey; height:200px; width:400px" class="col-md-6">
+            <h2>Hello, @Model.Name</h2>
+        </div>
+        <div style="text-align:center; background-color:grey; height:200px; width:400px" class="col-md-6">
+            <h2>Your current balance is: $@Model.Balance</h2>
+        </div>
+    </div>
+    <br />
+    <div class="row">
+            <div style="background-color:grey; color:black;" class="col-md-6">
+                <table style="width:300px;">
+                    <tr style="padding:15px;">
+                        <td>
+                            Pickup Day
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => model.PickupDay)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 15px">
+                            Address
+                        </td>
+                        <td style="padding: 15px">
+                            @Html.DisplayFor(model => model.Address.AddressLine1)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 15px">
+                            City
+                        </td>
+                        <td style="padding: 15px">
+                            @Html.DisplayFor(model => model.Address.City)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 15px">
+                            State
+                        </td>
+                        <td style="padding: 15px">
+                            @Html.DisplayFor(model => model.Address.AbbreviatedState)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 15px">
+                            Zipcode
+                        </td>
+                        <td style="padding: 15px">
+                            @Html.DisplayFor(model => model.Address.Zipcode)
+                        </td>
+                    </tr>
+                </table>
+                <a asp-action="Edit" asp-route-id="@Model.Id">Edit Info</a>
+            </div>
+    </div>
+</div>
+@*<p>
     <a asp-action="Create">Create New</a>
 </p>
 <table class="table">
@@ -15,9 +71,6 @@
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IdentityUser)
             </th>
             <th></th>
         </tr>
@@ -39,4 +92,4 @@
         </tr>
 }
     </tbody>
-</table>
+</table>*@

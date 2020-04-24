@@ -15,7 +15,9 @@ namespace TrashCollector.Models
         public string Name { get; set; }
         public double Balance { get; set; }
         public DayOfWeek PickupDay { get; set; }
-        public DateTime OneTimePickup { get; set; }
+        public DateTime? TempStart { get; set; }
+        public DateTime? TempEnd { get; set; }
+        public DateTime? OneTimePickup { get; set; }
 
         [ForeignKey("IdentityUser")]
         public string IdentityUserId { get; set; }
