@@ -33,6 +33,30 @@ namespace TrashCollector.Controllers
             return View(customer);
         }
 
+        //GET: Customers/Date
+        public async Task<IActionResult> Date(int? id)
+        {
+            if(id == null)
+            {
+                return NotFound();
+            }
+
+            var customer = await _context.Customers.Where(c => c.Id == id).FirstOrDefaultAsync();
+            return View(customer);
+        }
+
+        // POST: Customers/Date
+        [HttpPost]
+        public IActionResult Date(int? id, Customer customer)
+        {
+            var customerToUpdate =  _context.Customers.Where(c => c.Id == id).FirstOrDefault();
+            customerToUpdate.OneTimePickup = customer.OneTimePickup;
+            customerToUpdate.TempStart = customer.TempStart;
+            customerToUpdate.TempEnd = customer.TempEnd;
+            _context.SaveChanges();
+
+            return RedirectToAction("Index");
+        }
         // GET: Customers/Details/5
         public async Task<IActionResult> Details(int? id)
         {

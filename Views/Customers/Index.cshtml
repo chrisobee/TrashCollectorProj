@@ -66,44 +66,16 @@
                     <a asp-action="Edit" asp-route-id="@Model.Id">Edit Info</a>
                 </div>
             </div>
-        <div style="background-color:grey; width:300px;"class="col-md-6">
-            @if(Model.OneTimePickup == null)
-            {
+            <div style="background-color:grey; width:300px;" class="col-md-6">
+                @if (Model.OneTimePickup == null)
+                {
                 <div class="alert alert-dismissible alert-info">
                     <button type="button" class="close" data-dismiss="alert">&times;</button>
-                    <p>Each customer is allowed one special request pickup per month. You can pick one here.</p>
+                    <p>Each customer is allowed one special request pickup per month. 
+                        <a class="alert-link" asp-action="Date" asp-route-id="@Model.Id">You can pick one here.</a>
+                    </p>
                 </div>
-            }
+                }
 
-        </div>
+            </div>
     </div>
-@*<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IdentityUser.Id)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>*@
