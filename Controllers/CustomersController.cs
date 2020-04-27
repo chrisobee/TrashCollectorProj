@@ -138,8 +138,12 @@ namespace TrashCollector.Controllers
             {
                 try
                 {
-                    _context.Update(customer.Address);
-                    _context.Update(customer);
+                    var customerToUpdate = _context.Customers.Include(c=>c.Address).Where(c => c.Id == id).FirstOrDefault();
+                    customerToUpdate.Address = customer.Address;
+                    customerToUpdate.Name = customer.Name;
+                    customerToUpdate.PickupDay = customer.PickupDay;
+                    _context.Update(customerToUpdate);
+
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
