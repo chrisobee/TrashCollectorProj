@@ -42,10 +42,12 @@ namespace TrashCollector.Controllers
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
             var employee = _context.Employees.Include(e => e.Address).Where(e => e.IdentityUserId == userId).FirstOrDefault();
 
-            var customers = _context.Customers.Include(c => c.Address).Where(c => c.PickupDay == filteredDay &&
+
+            var customers = _context.Customers.Include(c => c.Address).Where(c => c.PickupDay == filteredDay && 
                                                                              c.Address.Zipcode == employee.Address.Zipcode &&
-                                                                             DateTime.Now < c.TempStart &&
-                                                                             DateTime.Now > c.TempEnd).ToList();
+                                                                             (c.TempStart == null && c.TempEnd == null ? true:
+                                                                              DateTime.Now < c.TempStart && DateTime.Now > c.TempEnd ?
+                                                                              true : false)).ToList();
             return View(customers);
         }
         public async Task<IActionResult> ChargeCustomer(int? Id)
