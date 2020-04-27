@@ -30,8 +30,21 @@
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
             <td>
-                <button type="submit" asp-action="ChargeCustomer" asp-route-id="item.Id" class="btn btn-info">Confirm Pickup</button>
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                @if (item.TrashPickedUp == true)
+                {
+                    if (DateTime.Now - item.PickupTime >= TimeSpan.FromHours(24))
+                    {
+                        <a class="btn btn-info" asp-action="ChargeCustomer" asp-route-Id="@item.Id">Confirm Pickup</a>
+                    }
+                    else
+                    {
+                        <button type="button" class="btn btn-info disabled">Order Picked Up</button>
+                    }
+                }
+                else
+                {
+                    <a class="btn btn-info" asp-action="ChargeCustomer" asp-route-Id="@item.Id">Confirm Pickup</a>
+                }
             </td>
         </tr>
 }

@@ -46,11 +46,14 @@ namespace TrashCollector.Controllers
                                                                              c.Address.Zipcode == employee.Address.Zipcode).ToList();
             return View(customers);
         }
-        public async Task<IActionResult> ChargeCustomer(int? id)
+        public async Task<IActionResult> ChargeCustomer(int? Id)
         {
             double pricePerPickup = 5.00;
-            var customer = await _context.Customers.Where(c => c.Id == id).FirstOrDefaultAsync();
+            var customer = await _context.Customers.Where(c => c.Id == Id).FirstOrDefaultAsync();
+
             customer.Balance += pricePerPickup;
+            customer.TrashPickedUp = true;
+            customer.PickupTime = DateTime.Now;
             await _context.SaveChangesAsync();
             return RedirectToAction("Index");
         }

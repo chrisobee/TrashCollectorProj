@@ -14,6 +14,9 @@ namespace TrashCollector.Models
         public int Id { get; set; }
         public string Name { get; set; }
         public double Balance { get; set; }
+        public bool TrashPickedUp { get; set; }
+        [DataType(DataType.Time)]
+        public DateTime? PickupTime { get; set; }
         public DayOfWeek PickupDay { get; set; }
         [DataType(DataType.Date)]
         public DateTime? TempStart { get; set; }
