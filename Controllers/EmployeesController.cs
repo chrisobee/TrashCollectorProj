@@ -43,7 +43,9 @@ namespace TrashCollector.Controllers
             var employee = _context.Employees.Include(e => e.Address).Where(e => e.IdentityUserId == userId).FirstOrDefault();
 
             var customers = _context.Customers.Include(c => c.Address).Where(c => c.PickupDay == filteredDay &&
-                                                                             c.Address.Zipcode == employee.Address.Zipcode).ToList();
+                                                                             c.Address.Zipcode == employee.Address.Zipcode &&
+                                                                             DateTime.Now < c.TempStart &&
+                                                                             DateTime.Now > c.TempEnd).ToList();
             return View(customers);
         }
         public async Task<IActionResult> ChargeCustomer(int? Id)

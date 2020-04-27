@@ -67,11 +67,11 @@
                 </div>
             </div>
             <div style="background-color:grey; width:300px;" class="col-md-6">
-                @if (Model.OneTimePickup == null)
+                @if (Model.OneTimePickup == null && Model.TempStart == null && Model.TempEnd == null)
                 {
                 <div class="alert alert-info">
-                    <p>Each customer is allowed one special request pickup per month. 
-                        <a class="alert-link" asp-action="Date" asp-route-id="@Model.Id">You can pick one here.</a>
+                    <p>Each customer is allowed one special request pickup per month. Each customer can also specify dates to suspend pickups.
+                        <a class="alert-link" asp-action="Date" asp-route-id="@Model.Id">You can choose those options here.</a>
                     </p>
                 </div>
                 }
@@ -80,15 +80,36 @@
                     <table style="color:black;">
                         <tr>
                             <td>One Time Pickup Day</td>
-                            <td>@Html.DisplayFor(model => model.OneTimePickup)</td>
+                            @if (Model.OneTimePickup == null)
+                            {
+                                <td>Not Chosen</td>
+                            }
+                            else
+                            {
+                                <td>@Html.DisplayFor(model => model.OneTimePickup)</td>
+                            }
                         </tr>
                         <tr>
                             <td>Temp. Pickup Suspension Start</td>
-                            <td>@Html.DisplayFor(model => model.TempStart)</td>
+                            @if (Model.TempStart == null)
+                            {
+                                <td>Not Chosen</td>
+                            }
+                            else
+                            {
+                                <td>@Html.DisplayFor(model => model.TempStart)</td>
+                            }
                         </tr>
                         <tr>
                             <td>Temp. Pickup Suspension End</td>
-                            <td>@Html.DisplayFor(model => model.TempEnd)</td>
+                            @if (Model.TempEnd == null)
+                            {
+                                <td>Not Chosen</td>
+                            }
+                            else
+                            {
+                                <td>@Html.DisplayFor(model => model.TempEnd)</td>
+                            }
                         </tr>
                     </table>
 
