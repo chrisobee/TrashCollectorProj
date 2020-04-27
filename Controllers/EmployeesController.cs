@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using TrashCollector.Data;
 using TrashCollector.Models;
+using TrashCollector.ViewModels;
 
 namespace TrashCollector.Controllers
 {
@@ -71,15 +73,21 @@ namespace TrashCollector.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name")] Employee employee)
+        public async Task<IActionResult> Create(EmployeeWithAddress employeeWithAddress)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(employee);
+                _context.Add(employeeWithAddress.Address);
                 await _context.SaveChangesAsync();
+
+                employeeWithAddress.Employee.IdentityUserId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                employeeWithAddress.Employee.AddressId = employeeWithAddress.Address.AddressId;
+                _context.Add(employeeWithAddress.Employee);
+                await _context.SaveChangesAsync();
+
                 return RedirectToAction(nameof(Index));
             }
-            return View(employee);
+            return View(employeeWithAddress);
         }
 
         // GET: Employees/Edit/5
@@ -103,7 +111,7 @@ namespace TrashCollector.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name")] Employee employee)
+        public async Task<IActionResult> Edit(int id, Employee employee)
         {
             if (id != employee.Id)
             {
