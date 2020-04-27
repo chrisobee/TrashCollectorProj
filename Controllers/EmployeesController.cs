@@ -30,7 +30,7 @@ namespace TrashCollector.Controllers
                 return RedirectToAction("Create");
             }
             var currentDay = DateTime.Now.DayOfWeek;
-            var customers = _context.Customers.Include(c=> c.Address).Where(c => c.PickupDay == currentDay && 
+            var customers = _context.Customers.Include(c => c.Address).Where(c => c.PickupDay == currentDay && 
                                                                             c.Address.Zipcode == employee.Address.Zipcode).ToList();
             return View(customers);
         }
@@ -39,7 +39,11 @@ namespace TrashCollector.Controllers
         [HttpPost]
         public IActionResult Index(DayOfWeek filteredDay)
         {
-            var customers = _context.Customers.Where(c => c.PickupDay == filteredDay).ToList();
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var employee = _context.Employees.Include(e => e.Address).Where(e => e.IdentityUserId == userId).FirstOrDefault();
+
+            var customers = _context.Customers.Include(c => c.Address).Where(c => c.PickupDay == filteredDay &&
+                                                                             c.Address.Zipcode == employee.Address.Zipcode).ToList();
             return View(customers);
         }
         public async Task<IActionResult> ChargeCustomer(int? id)
