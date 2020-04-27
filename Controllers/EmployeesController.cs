@@ -23,8 +23,15 @@ namespace TrashCollector.Controllers
         // GET: Employees
         public IActionResult Index()
         {
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var employee = _context.Employees.Include(e => e.Address).Where(e => e.IdentityUserId == userId).FirstOrDefault();
+            if(employee == null)
+            {
+                return RedirectToAction("Create");
+            }
             var currentDay = DateTime.Now.DayOfWeek;
-            var customers = _context.Customers.Where(c => c.PickupDay == currentDay).ToList();
+            var customers = _context.Customers.Include(c=> c.Address).Where(c => c.PickupDay == currentDay && 
+                                                                            c.Address.Zipcode == employee.Address.Zipcode).ToList();
             return View(customers);
         }
 

@@ -26,7 +26,8 @@ namespace TrashCollector.Controllers
         // GET: Customers
         public async Task<IActionResult> Index()
         {
-            var customer = await _context.Customers.Include(c => c.Address).FirstOrDefaultAsync();
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var customer = await _context.Customers.Include(c => c.Address).Where(c => c.IdentityUserId == userId).FirstOrDefaultAsync();
             if(customer == null)
             {
                 return RedirectToAction("Create");
