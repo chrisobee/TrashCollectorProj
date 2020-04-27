@@ -15,8 +15,11 @@ namespace TrashCollector.Models
         public string Name { get; set; }
         public double Balance { get; set; }
         public DayOfWeek PickupDay { get; set; }
+        [DataType(DataType.Date)]
         public DateTime? TempStart { get; set; }
+        [DataType(DataType.Date)]
         public DateTime? TempEnd { get; set; }
+        [DataType(DataType.Date)]
         public DateTime? OneTimePickup { get; set; }
 
         [ForeignKey("IdentityUser")]

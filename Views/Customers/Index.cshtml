@@ -69,12 +69,30 @@
             <div style="background-color:grey; width:300px;" class="col-md-6">
                 @if (Model.OneTimePickup == null)
                 {
-                <div class="alert alert-dismissible alert-info">
-                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <div class="alert alert-info">
                     <p>Each customer is allowed one special request pickup per month. 
                         <a class="alert-link" asp-action="Date" asp-route-id="@Model.Id">You can pick one here.</a>
                     </p>
                 </div>
+                }
+                else
+                {
+                    <table style="color:black;">
+                        <tr>
+                            <td>One Time Pickup Day</td>
+                            <td>@Html.DisplayFor(model => model.OneTimePickup)</td>
+                        </tr>
+                        <tr>
+                            <td>Temp. Pickup Suspension Start</td>
+                            <td>@Html.DisplayFor(model => model.TempStart)</td>
+                        </tr>
+                        <tr>
+                            <td>Temp. Pickup Suspension End</td>
+                            <td>@Html.DisplayFor(model => model.TempEnd)</td>
+                        </tr>
+                    </table>
+
+                    <a asp-action="Date" asp-route-id="@Model.Id">Edit Dates</a>
                 }
 
             </div>
