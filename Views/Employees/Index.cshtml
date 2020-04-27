@@ -24,29 +24,42 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @if (item.TrashPickedUp == true)
-                {
-                    if (DateTime.Now - item.PickupTime >= TimeSpan.FromHours(24))
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @if (item.OneTimePickup != null && DateTime.Now.Date == item.OneTimePickup)
                     {
-                        <a class="btn btn-info" asp-action="ChargeCustomer" asp-route-Id="@item.Id">Confirm Pickup</a>
+                        <div class="alert alert-dismissible alert-warning">
+                            <h4 class="alert-heading">ATTENTION</h4>
+                            <p class="mb-0">@item.Name's special request day is today!</p>
+                            <a class="btn btn-warning" asp-action="ChargeCustomer" asp-route-Id="@item.Id">Confirm Pickup</a>
+                        </div>
+                    }
+                    else if (DateTime.Now.DayOfWeek != item.PickupDay)
+                    {
+                        <button type="button" class="btn btn-info disabled">Not Current Day</button>
+                    }
+                    else if (item.TrashPickedUp == true)
+                    {
+                        if (DateTime.Now - item.PickupTime >= TimeSpan.FromHours(24))
+                        {
+                            <a class="btn btn-info" asp-action="ChargeCustomer" asp-route-Id="@item.Id">Confirm Pickup</a>
+                        }
+                        else
+                        {
+                            <button type="button" class="btn btn-info disabled">Order Picked Up</button>
+                        }
                     }
                     else
                     {
-                        <button type="button" class="btn btn-info disabled">Order Picked Up</button>
+                        <a class="btn btn-info" asp-action="ChargeCustomer" asp-route-Id="@item.Id">Confirm Pickup</a>
                     }
-                }
-                else
-                {
-                    <a class="btn btn-info" asp-action="ChargeCustomer" asp-route-Id="@item.Id">Confirm Pickup</a>
-                }
-            </td>
-        </tr>
-}
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

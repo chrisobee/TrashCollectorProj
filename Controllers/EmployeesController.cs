@@ -31,7 +31,16 @@ namespace TrashCollector.Controllers
             }
             var currentDay = DateTime.Now.DayOfWeek;
             var customers = _context.Customers.Include(c => c.Address).Where(c => c.PickupDay == currentDay && 
-                                                                            c.Address.Zipcode == employee.Address.Zipcode).ToList();
+                                                                             c.Address.Zipcode == employee.Address.Zipcode &&
+                                                                            (c.TempStart == null && c.TempEnd == null ? true :
+                                                                             DateTime.Now < c.TempStart && DateTime.Now > c.TempEnd ?
+                                                                             true : false)).ToList();
+            var customerWithPickupDay = _context.Customers.Include(c => c.Address).Where(c => c.OneTimePickup == DateTime.Now.Date &&
+                                                                   c.Address.Zipcode == employee.Address.Zipcode).FirstOrDefault();
+            if(customerWithPickupDay != null)
+            {
+                customers.Add(customerWithPickupDay);
+            }
             return View(customers);
         }
 
@@ -55,6 +64,10 @@ namespace TrashCollector.Controllers
             double pricePerPickup = 5.00;
             var customer = await _context.Customers.Where(c => c.Id == Id).FirstOrDefaultAsync();
 
+            if(customer.OneTimePickup == DateTime.Now.Date)
+            {
+                customer.OneTimePickup = null;
+            }
             customer.Balance += pricePerPickup;
             customer.TrashPickedUp = true;
             customer.PickupTime = DateTime.Now;
