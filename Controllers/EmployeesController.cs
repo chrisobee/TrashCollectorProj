@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Newtonsoft.Json;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -9,6 +10,8 @@ using Microsoft.EntityFrameworkCore;
 using TrashCollector.Data;
 using TrashCollector.Models;
 using TrashCollector.ViewModels;
+using System.Net.Http;
+using Newtonsoft.Json.Linq;
 
 namespace TrashCollector.Controllers
 {
@@ -21,11 +24,25 @@ namespace TrashCollector.Controllers
         }
 
         // GET: Employees
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+            Geocode geocode = null;
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
             var employee = _context.Employees.Include(e => e.Address).Where(e => e.IdentityUserId == userId).FirstOrDefault();
-            if(employee == null)
+
+            //API Call to get lat and lng of zipcode for employee
+            string url = $"https://maps.googleapis.com/maps/api/geocode/json?address={employee.Address.Zipcode}&key=AIzaSyAjOXg7xbx0b2iET3XfBQK-JCSd967kXrw";
+            HttpClient client = new HttpClient();
+            HttpResponseMessage response = await client.GetAsync(url);
+            string jsonResult = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+            {
+                geocode = JsonConvert.DeserializeObject<Geocode>(jsonResult);
+            }
+            ViewBag.Lat = geocode.results[0].geometry.location.lat;
+            ViewBag.Lng = geocode.results[0].geometry.location.lng;
+
+            if (employee == null)
             {
                 return RedirectToAction("Create");
             }
@@ -46,19 +63,31 @@ namespace TrashCollector.Controllers
 
         // POST: Employees/Index
         [HttpPost]
-        public IActionResult Index(DayOfWeek filteredDay)
+        public async Task<IActionResult> Index(DayOfWeek filteredDay)
         {
+            Geocode geocode = null;
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
             var employee = _context.Employees.Include(e => e.Address).Where(e => e.IdentityUserId == userId).FirstOrDefault();
 
+            string url = $"https://maps.googleapis.com/maps/api/geocode/json?address={employee.Address.Zipcode}&key=AIzaSyAjOXg7xbx0b2iET3XfBQK-JCSd967kXrw";
+            HttpClient client = new HttpClient();
+            HttpResponseMessage response = await client.GetAsync(url);
+            string jsonResult = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+            {
+                geocode = JsonConvert.DeserializeObject<Geocode>(jsonResult);
+            }
+            ViewBag.Lat = geocode.results[0].geometry.location.lat;
+            ViewBag.Lng = geocode.results[0].geometry.location.lng;
 
-            var customers = _context.Customers.Include(c => c.Address).Where(c => c.PickupDay == filteredDay && 
+            var customers = _context.Customers.Include(c => c.Address).Where(c => c.PickupDay == filteredDay &&
                                                                              c.Address.Zipcode == employee.Address.Zipcode &&
-                                                                             (c.TempStart == null && c.TempEnd == null ? true:
+                                                                             (c.TempStart == null && c.TempEnd == null ? true :
                                                                               DateTime.Now < c.TempStart && DateTime.Now > c.TempEnd ?
                                                                               true : false)).ToList();
             return View(customers);
         }
+
         public async Task<IActionResult> ChargeCustomer(int? Id)
         {
             double pricePerPickup = 5.00;
