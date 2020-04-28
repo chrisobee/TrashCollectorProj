@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Stripe;
 using TrashCollector.Data;
 using TrashCollector.Models;
 using TrashCollector.ViewModels;
@@ -21,6 +22,21 @@ namespace TrashCollector.Controllers
         public CustomersController(ApplicationDbContext context)
         {
             _context = context;
+        }
+
+        public void TestAPI()
+        {
+            StripeConfiguration.ApiKey = "sk_test_QXLWoazG2Z3Fr0EmJziWCTNo00DuNT5jxU";
+
+            var options = new PaymentIntentCreateOptions
+            {
+                Amount = 1000,
+                Currency = "usd",
+                PaymentMethodTypes = new List<string> { "card" },
+                ReceiptEmail = "jenny.rosen@example.com",
+            };
+            var service = new PaymentIntentService();
+            service.Create(options);
         }
 
         // GET: Customers
@@ -49,7 +65,7 @@ namespace TrashCollector.Controllers
 
         // POST: Customers/Date
         [HttpPost]
-        public IActionResult Date(int? id, Customer customer)
+        public IActionResult Date(int? id, Models.Customer customer)
         {
             var customerToUpdate =  _context.Customers.Where(c => c.Id == id).FirstOrDefault();
             customerToUpdate.OneTimePickup = customer.OneTimePickup;
@@ -127,7 +143,7 @@ namespace TrashCollector.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Customer customer)
+        public async Task<IActionResult> Edit(int id, Models.Customer customer)
         {
             if (id != customer.Id)
             {

@@ -4,15 +4,42 @@
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_CustomerLayout.cshtml";
 }
+<style>
+    .nameNode{
+        
+        background-color:grey;
+        height:200px;
+        width:70%;
+        padding-top:10%
+    }
+    .balanceNode{
+        background-color:grey;
+        height:200px;
+        width:80%;
+        padding-top:10%;
+    }
+    .infoLink{
+        color:darkblue;
+        text-decoration:none;
+    }
+    .dateTable{
+        width:70%;
+        height:300px;
+        color:black;
+    }
+    .tableData{
+        padding:15px;
+    }
+</style>
 
     <div class="row">
-        <div class="col-md-6">
-            <div style="background-color: grey; height:200px; width:400px">
+        <div style ="text-align:center;"class="col-md-6">
+            <div class="nameNode">
                 <h2>Hello, @Model.Name</h2>
             </div>
         </div>
-        <div class="col-md-6">
-            <div style="background-color:grey; height:200px; width:400px">
+        <div style ="text-align:center;"class="col-md-6">
+            <div class="balanceNode">
                 <h2>Your current balance is: $@Model.Balance</h2>
             </div>
         </div>
@@ -20,101 +47,108 @@
     <br />
     <div class="row">
             <div class="col-md-6">
-                <div style="background-color:grey; width:300px; color:black; padding:20px;">
+                <div style="background-color:grey; width:60%; color:black; padding:20px;">
                     <table style="width:300px;">
-                        <tr style="padding:15px;">
-                            <td>
+                        <tr>
+                            <td class="tableData">
                                 Pickup Day
                             </td>
-                            <td>
+                            <td class="tableData">
                                 @Html.DisplayFor(model => model.PickupDay)
                             </td>
                         </tr>
                         <tr>
-                            <td style="padding: 15px">
+                            <td class="tableData">
                                 Address
                             </td>
-                            <td style="padding: 15px">
+                            <td class="tableData">
                                 @Html.DisplayFor(model => model.Address.AddressLine1)
                             </td>
                         </tr>
                         <tr>
-                            <td style="padding: 15px">
+                            <td class="tableData">
                                 City
                             </td>
-                            <td style="padding: 15px">
+                            <td class="tableData">
                                 @Html.DisplayFor(model => model.Address.City)
                             </td>
                         </tr>
                         <tr>
-                            <td style="padding: 15px">
+                            <td class="tableData">
                                 State
                             </td>
-                            <td style="padding: 15px">
+                            <td class="tableData">
                                 @Html.DisplayFor(model => model.Address.AbbreviatedState)
                             </td>
                         </tr>
                         <tr>
-                            <td style="padding: 15px">
+                            <td class="tableData">
                                 Zipcode
                             </td>
-                            <td style="padding: 15px">
+                            <td class="tableData">
                                 @Html.DisplayFor(model => model.Address.Zipcode)
                             </td>
                         </tr>
                     </table>
-                    <a asp-action="Edit" asp-route-id="@Model.Id">Edit Info</a>
+                    <a class="infoLink" asp-action="Edit" asp-route-id="@Model.Id">Edit Info</a>
                 </div>
             </div>
-            <div style="background-color:grey; width:300px;" class="col-md-6">
-                @if (Model.OneTimePickup == null && Model.TempStart == null && Model.TempEnd == null)
-                {
-                <div class="alert alert-info">
-                    <p>Each customer is allowed one special request pickup per month. Each customer can also specify dates to suspend pickups.
-                        <a class="alert-link" asp-action="Date" asp-route-id="@Model.Id">You can choose those options here.</a>
-                    </p>
+            <div class="col-md-6">
+                <div style="width:80%; background-color:grey;">
+                    @if (Model.OneTimePickup == null && Model.TempStart == null && Model.TempEnd == null)
+                    {
+                        <div class="alert alert-info">
+                            <p>
+                                Each customer is allowed one special request pickup per month. Each customer can also specify dates to suspend pickups.
+                                <a class="alert-link" asp-action="Date" asp-route-id="@Model.Id">You can choose those options here.</a>
+                            </p>
+                        </div>
+                    }
+                    else
+                    {
+                        <table class="dateTable">
+                            <tr>
+                                <td class="tableData">One Time Pickup Day</td>
+                                @if (Model.OneTimePickup == null)
+                                {
+                                    <td class="tableData">Not Chosen</td>
+                                }
+                                else
+                                {
+                                    <td class="tableData">@Html.DisplayFor(model => model.OneTimePickup)</td>
+                                }
+                            </tr>
+                            <tr>
+                                <td class="tableData">Temp. Pickup Suspension Start</td>
+                                @if (Model.TempStart == null)
+                                {
+                                    <td class="tableData">Not Chosen</td>
+                                }
+                                else
+                                {
+                                    <td class="tableData">@Html.DisplayFor(model => model.TempStart)</td>
+                                }
+                            </tr>
+                            <tr>
+                                <td class="tableData">Temp. Pickup Suspension End</td>
+                                @if (Model.TempEnd == null)
+                                {
+                                    <td class="tableData">Not Chosen</td>
+                                }
+                                else
+                                {
+                                    <td class="tableData">@Html.DisplayFor(model => model.TempEnd)</td>
+                                }
+                            </tr>
+                            <tr>
+                                <td class="tableData infoLink">
+                                    <a class="infoLink" asp-action="Date" asp-route-id="@Model.Id">Edit Dates</a>
+                                </td>
+                            </tr>
+                        </table>
+                    }
                 </div>
-                }
-                else
-                {
-                    <table style="color:black;">
-                        <tr>
-                            <td>One Time Pickup Day</td>
-                            @if (Model.OneTimePickup == null)
-                            {
-                                <td>Not Chosen</td>
-                            }
-                            else
-                            {
-                                <td>@Html.DisplayFor(model => model.OneTimePickup)</td>
-                            }
-                        </tr>
-                        <tr>
-                            <td>Temp. Pickup Suspension Start</td>
-                            @if (Model.TempStart == null)
-                            {
-                                <td>Not Chosen</td>
-                            }
-                            else
-                            {
-                                <td>@Html.DisplayFor(model => model.TempStart)</td>
-                            }
-                        </tr>
-                        <tr>
-                            <td>Temp. Pickup Suspension End</td>
-                            @if (Model.TempEnd == null)
-                            {
-                                <td>Not Chosen</td>
-                            }
-                            else
-                            {
-                                <td>@Html.DisplayFor(model => model.TempEnd)</td>
-                            }
-                        </tr>
-                    </table>
-
-                    <a asp-action="Date" asp-route-id="@Model.Id">Edit Dates</a>
-                }
+                
 
             </div>
     </div>

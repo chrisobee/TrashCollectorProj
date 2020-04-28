@@ -18,6 +18,7 @@ namespace TrashCollector.Controllers
     public class EmployeesController : Controller
     {
         private readonly ApplicationDbContext _context;
+        string[] apiKeys = System.IO.File.ReadAllLines("ApiKey.txt");
         public EmployeesController(ApplicationDbContext context)
         {
             _context = context;
@@ -31,7 +32,7 @@ namespace TrashCollector.Controllers
             var employee = _context.Employees.Include(e => e.Address).Where(e => e.IdentityUserId == userId).FirstOrDefault();
 
             //API Call to get lat and lng of zipcode for employee
-            string url = $"https://maps.googleapis.com/maps/api/geocode/json?address={employee.Address.Zipcode}&key=AIzaSyAjOXg7xbx0b2iET3XfBQK-JCSd967kXrw";
+            string url = $"https://maps.googleapis.com/maps/api/geocode/json?address={employee.Address.Zipcode}&key={apiKeys[0]}";
             HttpClient client = new HttpClient();
             HttpResponseMessage response = await client.GetAsync(url);
             string jsonResult = await response.Content.ReadAsStringAsync();
@@ -68,7 +69,7 @@ namespace TrashCollector.Controllers
             Geocode geocode = null;
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
             var employee = _context.Employees.Include(e => e.Address).Where(e => e.IdentityUserId == userId).FirstOrDefault();
-
+            
             string url = $"https://maps.googleapis.com/maps/api/geocode/json?address={employee.Address.Zipcode}&key=AIzaSyAjOXg7xbx0b2iET3XfBQK-JCSd967kXrw";
             HttpClient client = new HttpClient();
             HttpResponseMessage response = await client.GetAsync(url);
