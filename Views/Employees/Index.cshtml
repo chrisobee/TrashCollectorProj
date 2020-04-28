@@ -75,12 +75,37 @@
 
 <script>
     var map;
-    function initMap() {
-        map = new google.maps.Map(document.getElementById('map'), {
-            center: { lat: -34.397, lng: 150.644 },
-            zoom: 8
+    var geocoder;
+
+    function initialize() {
+        geocoder = new google.maps.Geocoder();
+
+        var latlng = new google.maps.LatLng(-34.397, 150.644);
+        var mapOptions = {
+            zoom: 8,
+            center: latlng
+        }
+        map = new google.maps.Map(document.getElementById('map'), mapOptions);
+        @foreach(var item in Model)
+        {
+            string address = $"{item.Address.AddressLine1} {item.Address.City} {item.Address.AbbreviatedState}";
+            @: codeAddress('@address');
+        }
+    }
+
+    function codeAddress(address) {
+        geocoder.geocode({ 'address': address }, function (results, status) {
+            if (status == 'OK') {
+                var marker = new google.maps.Marker({
+                    map: map,
+                    position: results[0].geometry.location
+                });
+            } else {
+                alert('Geocode was not successful for the following reason: ' + status);
+            }
         });
     }
+        
 </script>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAjOXg7xbx0b2iET3XfBQK-JCSd967kXrw&callback=initMap"
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAjOXg7xbx0b2iET3XfBQK-JCSd967kXrw&callback=initialize"
         async defer></script>
