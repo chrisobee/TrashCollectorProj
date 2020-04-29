@@ -44,7 +44,7 @@ namespace TrashCollector.Controllers
             }
             ViewBag.Lat = geocode.results[0].geometry.location.lat;
             ViewBag.Lng = geocode.results[0].geometry.location.lng;
-
+            ViewBag.ApiKey = apiKeys[0];
             if (employee == null)
             {
                 return RedirectToAction("Create");
@@ -80,6 +80,7 @@ namespace TrashCollector.Controllers
             {
                 geocode = JsonConvert.DeserializeObject<Geocode>(jsonResult);
             }
+            ViewBag.ApiKey = apiKeys[0];
             ViewBag.Lat = geocode.results[0].geometry.location.lat;
             ViewBag.Lng = geocode.results[0].geometry.location.lng;
 
@@ -104,6 +105,7 @@ namespace TrashCollector.Controllers
             {
                 geocode = JsonConvert.DeserializeObject<Geocode>(jsonResult);
             }
+            ViewBag.ApiKey = apiKeys[0];
             ViewBag.Lat = geocode.results[0].geometry.location.lat;
             ViewBag.Lng = geocode.results[0].geometry.location.lng;
             return View(customer);
