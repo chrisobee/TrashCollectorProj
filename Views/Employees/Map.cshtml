@@ -1,0 +1,91 @@
+﻿@model TrashCollector.Models.Customer
+
+@{
+    ViewData["Title"] = "Map";
+    Layout = "~/Views/Shared/_EmployeeLayout.cshtml";
+    ViewBag.Title = "Map";
+}
+
+<h1>Map</h1>
+
+<div>
+    <h4>Customer</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.PickupDay)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.PickupDay)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Address.AddressLine1)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Address.AddressLine1)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Address.City)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Address.City)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Address.AbbreviatedState)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Address.AbbreviatedState)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Address.Zipcode)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Address.Zipcode)
+        </dd>
+    </dl>
+</div>
+<div style="height:500px;">
+    <div style="height:500px;" id="map"></div>
+</div>
+<script>
+    var map;
+    var geocoder;
+
+    function initMap() {
+        geocoder = new google.maps.Geocoder();
+        var latlng = new google.maps.LatLng(@ViewBag.Lat, @ViewBag.Lng)
+        var mapOptions = {
+            zoom: 6,
+            center: latlng
+        };
+        map = new google.maps.Map(document.getElementById('map'), mapOptions);
+        codeAddress('"@Model.Address.AddressLine1 " + "@Model.Address.City " + "@Model.Address.AbbreviatedState"');
+        
+    }
+
+    function codeAddress(address) {
+        geocoder.geocode({ 'address': address }, function (results, status) {
+            if (status == 'OK') {
+                map.setCenter(results[0].geometry.location);
+                var marker = new google.maps.Marker({
+                    map: map,
+                    position: results[0].geometry.location
+                });
+            } else {
+                alert('Geocode was not successful for the following reason: ' + status);
+            }
+        });
+    }
+</script>
+<script async defer 
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAa7098zCQbeaLZJer7mD4_wIDPYjsBd0Y&callback=initMap">
+</script>
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>

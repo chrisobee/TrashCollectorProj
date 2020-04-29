@@ -36,7 +36,7 @@
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Name)
+                    <a asp-action="Map" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.Name)</a> 
                 </td>
                 <td>
                     @if (item.OneTimePickup != null && DateTime.Now.Date == item.OneTimePickup)
@@ -110,5 +110,5 @@
     }
         
 </script>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAjOXg7xbx0b2iET3XfBQK-JCSd967kXrw&callback=initialize"
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAa7098zCQbeaLZJer7mD4_wIDPYjsBd0Y&callback=initialize"
         async defer></script>

@@ -12,9 +12,11 @@ using TrashCollector.Models;
 using TrashCollector.ViewModels;
 using System.Net.Http;
 using Newtonsoft.Json.Linq;
+using Microsoft.AspNetCore.Authorization;
 
 namespace TrashCollector.Controllers
 {
+    [Authorize(Roles = "Employee")]
     public class EmployeesController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -87,6 +89,24 @@ namespace TrashCollector.Controllers
                                                                               DateTime.Now < c.TempStart && DateTime.Now > c.TempEnd ?
                                                                               true : false)).ToList();
             return View(customers);
+        }
+
+        //Map Method
+        public async Task<IActionResult> Map(int? Id)
+        {
+            var customer = _context.Customers.Include(c => c.Address).Where(c => c.Id == Id).FirstOrDefault();
+            Geocode geocode = null;
+            string url = $"https://maps.googleapis.com/maps/api/geocode/json?address={customer.Address.Zipcode}&key={apiKeys[0]}";
+            HttpClient client = new HttpClient();
+            HttpResponseMessage response = await client.GetAsync(url);
+            string jsonResult = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+            {
+                geocode = JsonConvert.DeserializeObject<Geocode>(jsonResult);
+            }
+            ViewBag.Lat = geocode.results[0].geometry.location.lat;
+            ViewBag.Lng = geocode.results[0].geometry.location.lng;
+            return View(customer);
         }
 
         public async Task<IActionResult> ChargeCustomer(int? Id)
