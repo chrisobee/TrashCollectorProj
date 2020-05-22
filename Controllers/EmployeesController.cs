@@ -20,7 +20,7 @@ namespace TrashCollector.Controllers
     public class EmployeesController : Controller
     {
         private readonly ApplicationDbContext _context;
-        string[] apiKeys = System.IO.File.ReadAllLines("ApiKey.txt");
+        private readonly string[] apiKeys = System.IO.File.ReadAllLines("ApiKey.txt");
         public EmployeesController(ApplicationDbContext context)
         {
             _context = context;
@@ -96,6 +96,7 @@ namespace TrashCollector.Controllers
         public async Task<IActionResult> Map(int? Id)
         {
             var customer = _context.Customers.Include(c => c.Address).Where(c => c.Id == Id).FirstOrDefault();
+
             Geocode geocode = null;
             string url = $"https://maps.googleapis.com/maps/api/geocode/json?address={customer.Address.Zipcode}&key={apiKeys[0]}";
             HttpClient client = new HttpClient();
@@ -105,6 +106,7 @@ namespace TrashCollector.Controllers
             {
                 geocode = JsonConvert.DeserializeObject<Geocode>(jsonResult);
             }
+
             ViewBag.ApiKey = apiKeys[0];
             ViewBag.Lat = geocode.results[0].geometry.location.lat;
             ViewBag.Lng = geocode.results[0].geometry.location.lng;

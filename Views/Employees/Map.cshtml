@@ -52,6 +52,7 @@
 </div>
 <div style="height:500px;">
     <div style="height:500px;" id="map"></div>
+    <a asp-action="Index">Back to List</a>
 </div>
 <script>
     var map;
@@ -86,6 +87,3 @@
 <script async defer 
         src="https://maps.googleapis.com/maps/api/js?key=@ViewBag.ApiKey&callback=initMap">
 </script>
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
